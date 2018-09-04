@@ -11,11 +11,16 @@ class SalesController < ApplicationController
     @sale = Sale.new(sale_params)
     total = @sale.value - (@sale.value * (@sale.discount / 100.0)
     @sale.value = total.to_i
-    if @sale.save
-      redirect_to sales_path
-    else
-      redirect_to sales_new_path
-    end
+      if @sale.tax == 1
+       total = @sale.value - (@sale.value * 0.19)
+       @sale.tax = 19
+       end
+    @sale.save
+    redirect_to sales_path
+  end
+
+  def done
+    @sale = Sale.all
   end
 
   private
